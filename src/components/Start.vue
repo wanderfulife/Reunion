@@ -68,6 +68,11 @@
 						</select>
 					</div>
 
+					<!-- Text Input for Precision Questions -->
+					<div v-else-if="currentQuestion.type === 'text'">
+						<input type="text" v-model="answers[currentQuestion.id]" class="form-control">
+					</div>
+
 					<!-- Number Input Question -->
 					<div v-else-if="currentQuestion.type === 'number'">
 						<input type="number" v-model="answers[currentQuestion.id]"
@@ -276,6 +281,8 @@ const isAnswerValid = computed(() => {
 			return answer !== undefined && answer !== '' && !isNaN(answer);
 		case 'multipleChoiceWithCount':
 			return typeof answer === 'object' && Object.values(answer).some(count => count > 0);
+		case 'text':
+			return answer !== undefined && answer.trim() !== '';
 		default:
 			return false;
 	}
@@ -370,6 +377,10 @@ const finishSurvey = async () => {
 						return `${option ? option.text : optionValue}: ${count}`;
 					}).join(', ');
 				break;
+			case 'text':
+				// For precision questions, store the text input directly
+				formattedAnswers[questionId] = answer;
+				break;
 			default:
 				formattedAnswers[questionId] = answer;
 		}
@@ -395,7 +406,6 @@ const finishSurvey = async () => {
 		console.error('Error saving survey:', error);
 	}
 };
-
 
 const endSurvey = () => {
 	console.log('Survey ended - respondent not eligible');

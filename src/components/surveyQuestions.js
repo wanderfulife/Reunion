@@ -470,6 +470,13 @@ export const questions = [
 			{ text: "Dans n'importe quelle ville de l'ile", value: "toute_ile" },
 			{ text: "Autre", value: "autre" },
 		],
+		nextQuestion: (answers) =>
+			answers.Q12 === "autre" ? "Q12precision" : "Q13",
+	},
+	{
+		id: "Q12precision",
+		text: "Veuillez préciser :",
+		type: "text",
 		nextQuestion: "Q13",
 	},
 	{
@@ -523,11 +530,17 @@ export const questions = [
 			{ text: "Autres", value: "autres" },
 		],
 		nextQuestion: (answers) => {
-			if (answers.Q4 === "oui") {
-				return "Q15";
+			if (answers.Q14 && answers.Q14.includes("autres")) {
+				return "Q14precision";
 			}
-			return "Q16";
+			return answers.Q4 === "oui" ? "Q15" : "Q16";
 		},
+	},
+	{
+		id: "Q14precision",
+		text: "Veuillez préciser les autres difficultés :",
+		type: "text",
+		nextQuestion: (answers) => (answers.Q4 === "oui" ? "Q15" : "Q16"),
 	},
 	{
 		id: "Q15",
@@ -546,6 +559,13 @@ export const questions = [
 			},
 			{ text: "Autre", value: "autre" },
 		],
+		nextQuestion: (answers) =>
+			answers.Q15 && answers.Q15.includes("autre") ? "Q15precision" : "Q16",
+	},
+	{
+		id: "Q15precision",
+		text: "Veuillez préciser les autres difficultés :",
+		type: "text",
 		nextQuestion: "Q16",
 	},
 	{
@@ -599,6 +619,13 @@ export const questions = [
 			{ text: "Couple avec enfant(s)", value: "couple_avec_enfants" },
 			{ text: "Autres cas de figure (colocation...)", value: "autres" },
 		],
+		nextQuestion: (answers) =>
+			answers.Q20 === "autres" ? "Q20precision" : "Q21",
+	},
+	{
+		id: "Q20precision",
+		text: "Veuillez préciser votre situation familiale :",
+		type: "text",
 		nextQuestion: "Q21",
 	},
 	{
@@ -621,6 +648,13 @@ export const questions = [
 			},
 			{ text: "Autres", value: "autres" },
 		],
+		nextQuestion: (answers) =>
+			answers.Q21 && answers.Q21.includes("autres") ? "Q21precision" : "Q22",
+	},
+	{
+		id: "Q21precision",
+		text: "Veuillez préciser le type de handicap ou de fragilité :",
+		type: "text",
 		nextQuestion: "Q22",
 	},
 	{
@@ -667,6 +701,13 @@ export const questions = [
 			{ text: "Autre", value: "autre" },
 			{ text: "Ne sait pas", value: "ne_sait_pas" },
 		],
+		nextQuestion: (answers) =>
+			answers.Q23b === "autre" ? "Q23bprecision" : "Q24",
+	},
+	{
+		id: "Q23bprecision",
+		text: "Veuillez préciser le type d'abonnement :",
+		type: "text",
 		nextQuestion: "Q24",
 	},
 	{
