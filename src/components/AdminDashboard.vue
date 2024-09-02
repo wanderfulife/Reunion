@@ -31,15 +31,6 @@
 							</li>
 						</ul>
 					</div>
-					<div class="dashboard-card">
-						<h3>Enquêtes par Type</h3>
-						<ul>
-							<li v-for="(count, type) in surveysByType" :key="type">
-								<span>{{ type }}</span>
-								<span class="count">{{ count }}</span>
-							</li>
-						</ul>
-					</div>
 				</div>
 				<button @click="downloadData" class="btn-download">Télécharger les Données</button>
 			</div>

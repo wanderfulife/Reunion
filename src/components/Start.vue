@@ -234,10 +234,24 @@ const selectAnswer = (questionId, optionValue) => {
 			} else {
 				answers.value[questionId].splice(index, 1);
 			}
+			// Clear answers for subsequent questions as they may no longer be valid
+			Object.keys(answers.value).forEach(qId => {
+				const qIndex = questions.findIndex(q => q.id === qId);
+				if (qIndex > questions.findIndex(q => q.id === questionId)) {
+					delete answers.value[qId];
+				}
+			});
 			break;
 		case 'singleChoice':
 		case 'dropdown':
 			answers.value[questionId] = optionValue;
+			// Clear answers for subsequent questions as they may no longer be valid
+			Object.keys(answers.value).forEach(qId => {
+				const qIndex = questions.findIndex(q => q.id === qId);
+				if (qIndex > questions.findIndex(q => q.id === questionId)) {
+					delete answers.value[qId];
+				}
+			});
 			break;
 		case 'multipleChoiceWithCount':
 			// This is handled by v-model in the template
@@ -266,6 +280,7 @@ const isAnswerValid = computed(() => {
 			return false;
 	}
 });
+
 const nextQuestion = () => {
 	if (currentQuestion.value) {
 		let nextQuestionId;
@@ -280,10 +295,23 @@ const nextQuestion = () => {
 		} else {
 			const nextIndex = questions.findIndex(q => q.id === nextQuestionId);
 			if (nextIndex !== -1) {
-				currentQuestionIndex.value = nextIndex;
-				// Initialize the answer for the next question if it's multipleChoiceWithCount
-				if (questions[nextIndex].type === 'multipleChoiceWithCount') {
-					answers.value[questions[nextIndex].id] = {};
+				// Only add to history if we're actually moving to a new question
+				if (nextIndex !== currentQuestionIndex.value) {
+					questionHistory.value.push(currentQuestionIndex.value);
+					currentQuestionIndex.value = nextIndex;
+
+					// Clear answers for all questions after the new current one
+					Object.keys(answers.value).forEach(questionId => {
+						const questionIndex = questions.findIndex(q => q.id === questionId);
+						if (questionIndex > currentQuestionIndex.value) {
+							delete answers.value[questionId];
+						}
+					});
+
+					// Initialize the answer for the next question if it's multipleChoiceWithCount
+					if (questions[nextIndex].type === 'multipleChoiceWithCount') {
+						answers.value[questions[nextIndex].id] = {};
+					}
 				}
 			} else {
 				finishSurvey();
@@ -296,7 +324,22 @@ const nextQuestion = () => {
 
 const previousQuestion = () => {
 	if (questionHistory.value.length > 0) {
-		currentQuestionIndex.value = questionHistory.value.pop();
+		const previousIndex = questionHistory.value.pop();
+		currentQuestionIndex.value = previousIndex;
+
+		// Clear answers for all questions after the current one
+		const currentQuestionId = questions[currentQuestionIndex.value].id;
+		Object.keys(answers.value).forEach(questionId => {
+			const questionIndex = questions.findIndex(q => q.id === questionId);
+			if (questionIndex > currentQuestionIndex.value) {
+				delete answers.value[questionId];
+			}
+		});
+
+		// If the current question is a multiple choice, reset its answer
+		if (questions[currentQuestionIndex.value].type === 'multipleChoice') {
+			answers.value[currentQuestionId] = [];
+		}
 	}
 };
 
@@ -366,6 +409,7 @@ const resetSurvey = () => {
 	currentQuestionIndex.value = 0;
 	selectedLocation.value = null;
 	isSurveyComplete.value = false;
+	questionHistory.value = [];
 };
 
 const getDocCount = async () => {

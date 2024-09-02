@@ -522,7 +522,12 @@ export const questions = [
 			},
 			{ text: "Autres", value: "autres" },
 		],
-		nextQuestion: "Q15",
+		nextQuestion: (answers) => {
+			if (answers.Q4 === "oui") {
+				return "Q15";
+			}
+			return "Q16";
+		},
 	},
 	{
 		id: "Q15",
