@@ -34,9 +34,9 @@
 				<h2>Lieu de passation du questionnaire :</h2>
 				<select v-model="selectedLocation" class="form-control">
 					<option value="">Sélectionnez une commune</option>
-					<option v-for="commune in reunionCommunes" :key="`${commune.commune}-${commune.altitude}`"
+					<option v-for="commune in passation" :key="`${commune.commune}`"
 						:value="commune">
-						{{ commune.commune }} - {{ commune.altitude }}
+						{{ commune.commune }}
 					</option>
 				</select>
 				<button @click="setLocation" class="btn-next" :disabled="!selectedLocation">Suivant</button>
@@ -56,17 +56,6 @@
 							<label :for="'option-' + currentQuestion.id + '-' + index">{{ option.text }}</label>
 						</div>
 					</div>
-
-					<!-- Single Choice Questions -->
-					<!-- <div v-else-if="currentQuestion.type === 'singleChoice'">
-						<select v-model="answers[currentQuestion.id]" class="form-control">
-							<option value="">Sélectionnez une option</option>
-							<option v-for="(option, index) in currentQuestion.options" :key="index"
-								:value="option.value">
-								{{ option.text }}
-							</option>
-						</select>
-					</div> -->
 
 					<!-- Single Choice Questions -->
 					<div v-if="currentQuestion.type === 'singleChoice'">
@@ -143,7 +132,7 @@ import { db } from "../firebaseConfig";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import * as XLSX from "xlsx";
-import { questions, reunionCommunes } from './surveyQuestions.js';
+import { questions, passation } from './surveyQuestions.js';
 
 import AdminDashboard from './AdminDashboard.vue';
 
@@ -448,7 +437,7 @@ const finishSurvey = async () => {
 		DATE: new Date().toLocaleDateString("fr-FR").replace(/\//g, "-"),
 		JOUR: new Date().toLocaleDateString("fr-FR", { weekday: 'long' }),
 		ENQUETEUR: enqueteur.value,
-		LIEU_PASSATION: `${selectedLocation.value.commune} - ${selectedLocation.value.altitude}`,
+		LIEU_PASSATION: selectedLocation.value.commune,
 		HEURE_FIN: new Date().toLocaleTimeString("fr-FR", { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
 		...formattedAnswers
 	};
