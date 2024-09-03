@@ -518,19 +518,14 @@ body {
 /* Center the Start Survey button horizontally and vertically */
 .start-survey-container {
 	justify-content: center;
-	/* Center horizontally */
 	align-items: center;
-	/* Center vertically */
 	height: 50vh;
-	/* Full viewport height */
 	width: 100%;
-	/* Full width */
 	margin-bottom: 5%;
 }
 
 .content-container {
 	flex-grow: 1;
-	/* This allows the content to take up available space */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -540,7 +535,6 @@ body {
 	margin: 0 auto;
 	box-sizing: border-box;
 	overflow-y: auto;
-	/* Allow scrolling if content overflows */
 }
 
 .question-container {
@@ -551,9 +545,7 @@ body {
 .input-container {
 	display: flex;
 	justify-content: center;
-	/* Center horizontally */
 	width: 100%;
-	/* Take full width of the parent */
 }
 
 h2 {
@@ -564,7 +556,6 @@ h2 {
 .form-control {
 	width: 100%;
 	max-width: 400px;
-	/* Maximum width of the input */
 	padding: 10px;
 	border-radius: 5px;
 	border: 1px solid white;
@@ -578,8 +569,7 @@ h2 {
 
 .btn-next,
 .btn-return,
-.btn-end,
-.btn-option {
+.btn-end {
 	width: 100%;
 	max-width: 400px;
 	color: white;
@@ -604,11 +594,6 @@ h2 {
 	margin-top: 30px;
 }
 
-.btn-option {
-	background-color: #4a5a83;
-	text-align: left;
-}
-
 .logo {
 	max-width: 25%;
 	height: auto;
@@ -623,7 +608,6 @@ h2 {
 	width: 100%;
 	box-sizing: border-box;
 	position: relative;
-	/* Keep the footer relative to its parent */
 }
 
 .btn-download {
@@ -661,31 +645,105 @@ h2 {
 	transition: width 0.3s ease-in-out;
 }
 
-@media screen and (max-width: 768px) {
-	.question-container {
-		margin-bottom: 20px;
-	}
-
-	.btn-return {
-		margin-top: 20px;
-	}
-
-	.logo {
-		margin-top: 30px;
-	}
+/* Updated styles for multiple choice options */
+.checkbox-option {
+	margin-bottom: 15px;
+	position: relative;
 }
 
-/* Ensure responsive centering */
-@media screen and (max-width: 480px) {
-	.form-control {
-		max-width: 100%;
-		/* Ensure full width on small screens */
-	}
+.checkbox-option input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+.checkbox-option label {
+	display: block;
+	position: relative;
+	padding: 15px 15px 15px 50px;
+	background-color: #4a5a83;
+	color: white;
+	border-radius: 10px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.checkbox-option label:hover {
+	background-color: #5b6b94;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.checkbox-option label:before {
+	content: '';
+	position: absolute;
+	left: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 24px;
+	height: 24px;
+	border: 2px solid white;
+	border-radius: 4px;
+	background-color: transparent;
+	transition: all 0.3s ease;
+}
+
+.checkbox-option input[type="checkbox"]:checked+label {
+	background-color: #3f51b5;
+	font-weight: bold;
+}
+
+.checkbox-option input[type="checkbox"]:checked+label:before {
+	background-color: white;
+	border-color: white;
+}
+
+.checkbox-option input[type="checkbox"]:checked+label:after {
+	content: '✔';
+	position: absolute;
+	left: 22px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #3f51b5;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+/* Style adjustments for single choice options */
+.form-control {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-color: #4a5a83;
+	color: white;
+	padding: 15px;
+	border-radius: 10px;
+	border: none;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.form-control:hover,
+.form-control:focus {
+	background-color: #5b6b94;
+	outline: none;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.form-control option {
+	background-color: #2a3b63;
+	color: white;
+	padding: 10px;
 }
 
 .btn-pdf {
 	background-color: #ff9800;
-	/* Orange color to make it distinct */
 	color: white;
 	padding: 15px;
 	margin: 10px 0;
@@ -701,7 +759,6 @@ h2 {
 
 .btn-pdf:hover {
 	background-color: #f57c00;
-	/* Darker orange on hover */
 }
 
 .modal {
@@ -751,10 +808,46 @@ h2 {
 	cursor: pointer;
 }
 
-/* Ensure the PDF fits within the modal */
 .pdf-content iframe {
 	flex-grow: 1;
 	border: none;
 	margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+	.question-container {
+		margin-bottom: 20px;
+	}
+
+	.btn-return {
+		margin-top: 20px;
+	}
+
+	.logo {
+		margin-top: 30px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.form-control {
+		max-width: 100%;
+	}
+
+	.checkbox-option label {
+		font-size: 14px;
+		padding: 12px 12px 12px 45px;
+	}
+
+	.checkbox-option label:before {
+		width: 20px;
+		height: 20px;
+		left: 12px;
+	}
+
+	.checkbox-option input[type="checkbox"]:checked+label:after {
+		left: 18px;
+		font-size: 14px;
+	}
 }
 </style>
