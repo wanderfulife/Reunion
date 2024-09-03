@@ -311,11 +311,11 @@ export const questions = [
 			{ text: "La voiture conducteur", value: "voiture_conducteur" },
 			{
 				text: "La voiture passager (conduit par des amis ou famille)",
-				value: "voiture_passager",
+				value: "1",
 			},
 			{
 				text: "Covoiturage via une plateforme ou appli (Karos, Blablacar...)",
-				value: "covoiturage",
+				value: "2",
 			},
 			{ text: "L'autostop", value: "autostop" },
 			{ text: "Les bus urbains ou Car jaune", value: "bus" },

@@ -409,31 +409,21 @@ const finishSurvey = async () => {
 		switch (question.type) {
 			case 'multipleChoice':
 				formattedAnswers[questionId] = answer.map(optionValue => {
-					const option = question.options.find(opt => opt.value === optionValue);
-					return option ? option.text : optionValue;
-				}).join(', ');
+					return question.options.findIndex(opt => opt.value === optionValue) + 1;
+				}).join(',');
 				break;
 			case 'singleChoice':
 			case 'dropdown':
-				if (questionId === 'Q12') {
-					const option = question.options.find(opt => opt.value === answer);
-					if (option && typeof option.text === 'function') {
-						formattedAnswers[questionId] = option.text(selectedLocation.value);
-					} else {
-						formattedAnswers[questionId] = option ? option.text : answer;
-					}
-				} else {
-					const option = question.options.find(opt => opt.value === answer);
-					formattedAnswers[questionId] = option ? option.text : answer;
-				}
+				const optionIndex = question.options.findIndex(opt => opt.value === answer);
+				formattedAnswers[questionId] = optionIndex !== -1 ? (optionIndex + 1).toString() : '';
 				break;
 			case 'multipleChoiceWithCount':
 				formattedAnswers[questionId] = Object.entries(answer)
 					.filter(([_, count]) => count > 0)
 					.map(([optionValue, count]) => {
-						const option = question.options.find(opt => opt.value === optionValue);
-						return `${option ? option.text : optionValue}: ${count}`;
-					}).join(', ');
+						const optionIndex = question.options.findIndex(opt => opt.value === optionValue);
+						return `${optionIndex + 1}:${count}`;
+					}).join(',');
 				break;
 			case 'text':
 			case 'number':
