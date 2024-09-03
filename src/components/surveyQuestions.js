@@ -647,6 +647,10 @@ export const questions = [
 		type: "multipleChoice",
 		options: [
 			{
+				text: "Non",
+				value: "Non",
+			},
+			{
 				text: "Handicap physique (moteur ou sensoriel)",
 				value: "handicap_physique",
 			},
