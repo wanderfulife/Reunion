@@ -312,7 +312,13 @@ const isAnswerValid = computed(() => {
 		case 'number':
 			return answer !== undefined && answer !== '' && !isNaN(answer);
 		case 'multipleChoiceWithCount':
-			return typeof answer === 'object' && Object.values(answer).some(count => count > 0);
+			if (currentQuestion.value.id === 'Q5') {
+				// For Q5, consider it valid even if all values are 0
+				return typeof answer === 'object' && Object.keys(answer).length > 0;
+			} else {
+				// For other multipleChoiceWithCount questions, keep the original logic
+				return typeof answer === 'object' && Object.values(answer).some(count => count > 0);
+			}
 		case 'text':
 			return answer !== undefined && answer.trim() !== '';
 		default:
