@@ -206,10 +206,31 @@ const startSurvey = () => {
 	currentStep.value = 'eligibility';
 };
 
-const checkEligibility = (isEligible) => {
+const checkEligibility = async (isEligible) => {
 	if (isEligible) {
 		currentStep.value = 'location';
 	} else {
+		// Save "non" as RSA value
+		const surveyData = {
+			ID_questionnaire: await getNextId(),
+			HEURE_DEBUT: new Date().toLocaleTimeString("fr-FR", { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+			DATE: new Date().toLocaleDateString("fr-FR").replace(/\//g, "-"),
+			JOUR: new Date().toLocaleDateString("fr-FR", { weekday: 'long' }),
+			ENQUETEUR: enqueteur.value,
+			LIEU_PASSATION: "N/A",
+			HEURE_FIN: new Date().toLocaleTimeString("fr-FR", { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+			RSA: "non"
+		};
+
+		try {
+			await addDoc(collection(db, "ReunionSurvey"), surveyData);
+			console.log('Non-eligible survey saved successfully');
+			getDocCount();
+		} catch (error) {
+			console.error('Error saving non-eligible survey:', error);
+		}
+
+		// Stop the survey
 		endSurvey();
 	}
 };

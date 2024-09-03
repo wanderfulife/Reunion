@@ -92,6 +92,7 @@ const downloadData = async () => {
 			'JOUR',
 			'HEURE_DEBUT',
 			'HEURE_FIN',
+			'RSA', // Add RSA to the header order
 			'LIEU_PASSATION',
 			...questions.map(q => q.id)
 		];
@@ -99,7 +100,12 @@ const downloadData = async () => {
 		const data = querySnapshot.docs.map(doc => {
 			const docData = doc.data();
 			return headerOrder.reduce((acc, key) => {
-				acc[key] = docData[key] || '';
+				if (key === 'RSA' && !docData[key]) {
+					// If RSA is not explicitly set, assume it's "oui" for completed surveys
+					acc[key] = 'oui';
+				} else {
+					acc[key] = docData[key] || '';
+				}
 				return acc;
 			}, {});
 		});
