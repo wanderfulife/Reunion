@@ -114,6 +114,7 @@
 					<div class="navigation-buttons">
 						<button @click="nextQuestion" class="btn-next" :disabled="!isAnswerValid">Suivant</button>
 						<button @click="previousQuestion" class="btn-return" v-if="canGoBack">Retour</button>
+						<button @click="returnToLocation" class="btn-return" v-if="currentQuestion.id === 'Q1'">Retour</button>
 					</div>
 				</div>
 			</div>
@@ -177,6 +178,13 @@ const isOptionSelected = (questionId, optionValue) => {
 		return Array.isArray(answers.value[questionId]) && answers.value[questionId].includes(optionValue);
 	}
 	return false;
+};
+
+const returnToLocation = () => {
+	currentStep.value = 'location';
+	currentQuestionIndex.value = -1; // Reset question index
+	answers.value = {}; // Clear answers
+	questionHistory.value = []; // Clear question history
 };
 
 const canGoBack = computed(() => currentQuestionIndex.value > 0);
