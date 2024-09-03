@@ -466,7 +466,20 @@ export const questions = [
 		type: "singleChoice",
 		options: [
 			{ text: "Dans ma commune / ma ville uniquement", value: "commune" },
-			{ text: "Dans la Micro-région XX", value: "micro_region" },
+			{
+				text: (location) => {
+					if (["ST PIERRE", "LE TAMPON"].includes(location.commune))
+						return "Dans la Micro-région Sud";
+					if (location.commune === "ST BENOIT")
+						return "Dans la Micro-région Est";
+					if (location.commune === "ST PAUL")
+						return "Dans la Micro-région Ouest";
+					if (location.commune === "ST DENIS")
+						return "Dans la Micro-région Nord";
+					return "Dans la Micro-région";
+				},
+				value: "micro_region",
+			},
 			{ text: "Dans n'importe quelle ville de l'ile", value: "toute_ile" },
 			{ text: "Autre", value: "autre" },
 		],

@@ -58,10 +58,21 @@
 					</div>
 
 					<!-- Single Choice Questions -->
-					<div v-else-if="currentQuestion.type === 'singleChoice'">
+					<!-- <div v-else-if="currentQuestion.type === 'singleChoice'">
 						<select v-model="answers[currentQuestion.id]" class="form-control">
 							<option value="">Sélectionnez une option</option>
 							<option v-for="(option, index) in currentQuestion.options" :key="index"
+								:value="option.value">
+								{{ option.text }}
+							</option>
+						</select>
+					</div> -->
+
+					<!-- Single Choice Questions -->
+					<div v-if="currentQuestion.type === 'singleChoice'">
+						<select v-model="answers[currentQuestion.id]" class="form-control">
+							<option value="">Sélectionnez une option</option>
+							<option v-for="(option, index) in getQuestionOptions(currentQuestion)" :key="index"
 								:value="option.value">
 								{{ option.text }}
 							</option>
@@ -309,6 +320,17 @@ const isAnswerValid = computed(() => {
 	}
 });
 
+// New method to get question options
+const getQuestionOptions = (question) => {
+	if (question.id === 'Q12') {
+		return question.options.map(option => ({
+			...option,
+			text: typeof option.text === 'function' ? option.text(selectedLocation.value) : option.text
+		}));
+	}
+	return question.options;
+};
+
 const nextQuestion = () => {
 	if (currentQuestion.value) {
 		let nextQuestionId;
@@ -387,8 +409,17 @@ const finishSurvey = async () => {
 				break;
 			case 'singleChoice':
 			case 'dropdown':
-				const option = question.options.find(opt => opt.value === answer);
-				formattedAnswers[questionId] = option ? option.text : answer;
+				if (questionId === 'Q12') {
+					const option = question.options.find(opt => opt.value === answer);
+					if (option && typeof option.text === 'function') {
+						formattedAnswers[questionId] = option.text(selectedLocation.value);
+					} else {
+						formattedAnswers[questionId] = option ? option.text : answer;
+					}
+				} else {
+					const option = question.options.find(opt => opt.value === answer);
+					formattedAnswers[questionId] = option ? option.text : answer;
+				}
 				break;
 			case 'multipleChoiceWithCount':
 				formattedAnswers[questionId] = Object.entries(answer)
@@ -399,7 +430,7 @@ const finishSurvey = async () => {
 					}).join(', ');
 				break;
 			case 'text':
-				// For precision questions, store the text input directly
+			case 'number':
 				formattedAnswers[questionId] = answer;
 				break;
 			default:
