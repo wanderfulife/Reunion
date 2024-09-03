@@ -1,4 +1,4 @@
-export const passation = [
+	export const passation = [
 	{
 		commune: "ST BENOIT",
 		codePostal: "97470",
@@ -519,7 +519,11 @@ export const questions = [
 						return "Dans la Micro-région Est";
 					if (location.commune === "ST PAUL")
 						return "Dans la Micro-région Ouest";
-					if (location.commune === "ST DENIS")
+					if (
+						["ST DENIS PAYET", "ST DENIS MARECHAL LECLERC"].includes(
+							location.commune
+						)
+					)
 						return "Dans la Micro-région Nord";
 					return "Dans la Micro-région";
 				},
