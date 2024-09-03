@@ -113,7 +113,7 @@ export const questions = [
 	},
 	{
 		id: "Q3",
-		text: "Avez-vous un arrêt de bus près de chez vous (= accessible à environ 5 minutes à pied) ?",
+		text: "Avez-vous un arrêt de bus près de chez vous accessible à environ 5 minutes à pied ?",
 		type: "singleChoice",
 		options: [
 			{ text: "Oui", value: "oui" },
