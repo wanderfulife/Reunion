@@ -43,7 +43,7 @@
 	},
 ];
 
-const reunionCommunes = [
+export const reunionCommunes = [
 	{
 		commune: "LES AVIRONS",
 		codePostal: "97425",

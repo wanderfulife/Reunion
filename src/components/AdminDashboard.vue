@@ -44,7 +44,7 @@ import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import * as XLSX from 'xlsx';
-import { questions } from './surveyQuestions.js';
+import { questions, reunionCommunes } from './surveyQuestions.js';
 
 const showSignInModal = ref(false);
 const showAdminDashboard = ref(false);
@@ -92,17 +92,27 @@ const downloadData = async () => {
 			'JOUR',
 			'HEURE_DEBUT',
 			'HEURE_FIN',
-			'RSA', // Add RSA to the header order
+			'RSA',
 			'LIEU_PASSATION',
 			...questions.map(q => q.id)
 		];
+
+		const communeOptions = reunionCommunes.map((commune, index) => ({
+			value: index + 1,
+			text: `${commune.commune} - ${commune.altitude}`
+		}));
 
 		const data = querySnapshot.docs.map(doc => {
 			const docData = doc.data();
 			return headerOrder.reduce((acc, key) => {
 				if (key === 'RSA' && !docData[key]) {
-					// If RSA is not explicitly set, assume it's "oui" for completed surveys
 					acc[key] = 'oui';
+				} else if (key === 'Q10' || key === 'Q11') {
+					// Map the index back to the commune text
+					const optionIndex = parseInt(docData[key]) - 1; // Subtract 1 because array indices start at 0
+					acc[key] = optionIndex >= 0 && optionIndex < communeOptions.length
+						? communeOptions[optionIndex].text
+						: docData[key] || '';
 				} else {
 					acc[key] = docData[key] || '';
 				}
