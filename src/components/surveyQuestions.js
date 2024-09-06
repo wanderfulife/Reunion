@@ -368,6 +368,8 @@ export const questions = [
 			{ text: "Les vélos en libre-service", value: "velo_libre_service" },
 			{ text: "La trottinette", value: "trottinette" },
 			{ text: "La moto, le scooter", value: "moto_scooter" },
+			{ text: "À pied", value: "À pied" },
+			{ text: "Non", value: "Non" },
 		],
 		nextQuestion: (answers) =>
 			answers.Q1 && answers.Q1.includes("bus") ? "Q2" : "Q3",
